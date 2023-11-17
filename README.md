@@ -33,7 +33,9 @@ Our web app aims to provide a user-friendly task management system to help indiv
 
 ## Model 
 
-At a minimum, this section should have a class diagram that succinctly describes the main classes designed for this project, as well as their associations.
+#### UML Class
+
+![UML Class](pics/UMLClass1.png)
 
 # Development Process 
 
