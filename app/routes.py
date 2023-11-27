@@ -1,6 +1,6 @@
 from app import app, db, load_user
-from app.models import User
-from app.forms import SignUpForm, SignInForm
+from app.models import User, Task
+from app.forms import SignUpForm, SignInForm, TaskForm
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -51,10 +51,20 @@ def users_signin():
                 user.password
             ): 
                 login_user(user)
-                return "Login Successful!!!"
+                return redirect(url_for('list_tasks'))
             else:
                 return '<p>Wrong password!</p>'
         except Exception as ex: 
                 return f'<p>Could not find a user with the given id: {ex}</p>'
     else:
         return render_template('users_signin.html', form=form)
+    
+@app.route('/task/create', methods=['GET', 'POST'])  
+def create_task():
+    pass
+    
+@app.route('/tasks')
+@login_required
+def list_tasks():
+    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
+    return render_template('tasks.html', tasks=user_tasks)
