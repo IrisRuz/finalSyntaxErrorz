@@ -39,23 +39,22 @@ def users_signup():
 
     return render_template('users_signup.html', form=form)
 
-@app.route('/users_signin', methods=['GET', 'POST'])
+@app.route('/users/signin', methods=['GET', 'POST'])
 def users_signin():
     form = SignInForm()
-
-    if form.validate_on_submit():
-        # Check if the user with the provided ID exists in the database
-        user = User.query.filter_by(id=form.id.data).first()
-
-        if user and user.password:
-            # If the user exists and has a password, check the password
-            hashed_password = user.password
-
-            if bcrypt.checkpw(form.password.data.encode('utf-8'), hashed_password):
-                # If the password matches, authenticate the user
+    if form.validate_on_submit(): 
+        try: 
+            user = load_user(form.id.data)
+            print(user)
+            if bcrypt.checkpw(
+                form.password.data.encode('utf-8'), 
+                user.password
+            ): 
                 login_user(user)
-
-                # Redirect to the "/catalog" page
-                return redirect(url_for('catalog'))
-            
-    return render_template('users_signin', form=form)
+                return "Login Successful!!!"
+            else:
+                return '<p>Wrong password!</p>'
+        except Exception as ex: 
+                return f'<p>Could not find a user with the given id: {ex}</p>'
+    else:
+        return render_template('users_signin.html', form=form)
