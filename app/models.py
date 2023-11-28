@@ -16,5 +16,4 @@ class Task(db.Model):
     description = db.Column(db.Text, nullable=False)
     due_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
-
     user = db.relationship('User', backref=db.backref('tasks'))

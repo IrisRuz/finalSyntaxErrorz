@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, PasswordField, SubmitField, validators, EmailField, DateField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, InputRequired
 
 class SignUpForm(FlaskForm):
     id = StringField('Id', validators=[DataRequired()])
@@ -8,6 +8,7 @@ class SignUpForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password_confirm = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
 
 class SignInForm(FlaskForm):
     id = StringField('Id', validators=[DataRequired()])
@@ -17,5 +18,5 @@ class SignInForm(FlaskForm):
 class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    due_date = DateField('Due Date', format='%m-%d-%Y', validators=[DataRequired()])
+    due_date = DateField('Due Date', format='%m-%d-%Y', validators=[InputRequired()])
     submit = SubmitField("Create Task")

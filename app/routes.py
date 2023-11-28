@@ -59,11 +59,37 @@ def users_signin():
     else:
         return render_template('users_signin.html', form=form)
     
+def get_next_task_number():
+    # Retrieve the maximum order number from the database and increment it by 1
+    max_task_number = db.session.query(func.max(Task.id)).scalar()
+    if max_task_number is None:
+        max_task_number = 0
+    return max_task_number + 1
+
 @app.route('/task/create', methods=['GET', 'POST'])  
 def create_task():
-    pass
+    form = TaskForm()
+
+    if form.validate_on_submit():
+        new_task = Task(
+            id = get_next_task_number(),
+            title=form.title.data,
+            description=form.description.data,
+            due_date=form.due_date.data,
+            user_id=current_user.id,
+            user = current_user
+        )
+
+        db.session.add(new_task)
+        db.session.commit()
+
+        flash('Task created successfully!', 'success')
+        return redirect(url_for('tasks'))
+    else:
+        print(form.errors)
+    return render_template('create_task.html', form=form)
     
-@app.route('/tasks')
+@app.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def list_tasks():
     user_tasks = Task.query.filter_by(user_id=current_user.id).all()
