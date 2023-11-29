@@ -66,10 +66,11 @@ def get_next_task_number():
         max_task_number = 0
     return max_task_number + 1
 
-@app.route('/task/create', methods=['GET', 'POST'])  
-def create_task():
+@app.route('/tasks', methods=['GET', 'POST'])
+@login_required
+def list_tasks():
+    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
     form = TaskForm()
-
     if form.validate_on_submit():
         new_task = Task(
             id = get_next_task_number(),
@@ -87,10 +88,4 @@ def create_task():
         return redirect(url_for('list_tasks'))
     else:
         print(form.errors)
-    return render_template('create_task.html', form=form)
-    
-@app.route('/tasks', methods=['GET', 'POST'])
-@login_required
-def list_tasks():
-    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
-    return render_template('tasks.html', tasks=user_tasks)
+    return render_template('tasks.html', form=form, tasks=user_tasks)
