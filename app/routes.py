@@ -84,7 +84,7 @@ def create_task():
         db.session.commit()
 
         flash('Task created successfully!', 'success')
-        return redirect(url_for('tasks'))
+        return redirect(url_for('list_tasks'))
     else:
         print(form.errors)
     return render_template('create_task.html', form=form)

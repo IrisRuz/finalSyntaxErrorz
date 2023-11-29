@@ -18,5 +18,5 @@ class SignInForm(FlaskForm):
 class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    due_date = DateField('Due Date', format='%m-%d-%Y', validators=[InputRequired()])
+    due_date = DateField('Due Date', format='%Y-%m-%d', validators=[InputRequired()])
     submit = SubmitField("Create Task")
