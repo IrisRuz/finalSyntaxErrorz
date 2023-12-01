@@ -1,31 +1,98 @@
 # Sprint Planning
 
-Date/Time: 
+Date/Time: November 26, 2023
 
-Participants: 
+Participants: Gabriel, Brendan, Chris, Tyler, Iris
 
-Goal Statement:  
+Goal Statement:  This sprint we aim to complete user story one and user story two.  We will accomplish this by allowing users to easily sign up onto the online platform and then we will enable registered users to log in, view, and manage their tasks, including adding new tasks.  
 
 # Daily Scrums
 
-## 99/99/99-99:99
+## 11/27/23-6pm
 
-Participants: 
+Participants: Iris, Tyler, Chris, Gabriel, Brendan
 
-Notes...
+###### Notes:
+###### User Story Breakdown: 
+- Discussed breaking down “User Story One” sign in functionality has been fixed. and Tyler completed sign-up
+  - Need to test to ensure working appropriately
+-	User story two has been started with Iris completing list_task route, class Task, and TaskForm
+  - Create_task route still needs to be implemented and testing needs to be completed
+    - 
+###### Team Schedules:
+- Daily Scrum meeting scheduled for tomorrow at 5:30pm
 
-# Sprint Review
+###### Repository Updates:
+- All changes have been committed on the Dev branch
+- Emphasized pulling the latest changes before any further implementations
 
-Date/Time: 
+## 11/28/23-10pm
 
-Participants: 
+Participants: No meeting today
+
+###### Notes:
+- Tyler discovered that the task forms were not validating the due dates for the specific tasks.
+  - Chris debugged the issue and fixed
+- Create tasks is functional but needs to be polished
+###### User Story Breakdown: 
+- When others confirm that User Story 2 is completed then we are ready for sprint 2
+###### Team Schedules:
+- Did not meet to discuss a time for daily scrum
+  - Anticipate around 5:30pm meeting time
+
+###### Repository Updates:
+- All changes have been committed on the Dev branch
+- Should wait for others to test on their systems to approve for push to main
+
+## 11/30/23-7pm
+
+Participants: Tyler, Gabriel, Chris
+
+###### Notes:
+
+###### User Story Breakdown: 
+
+- Although we can move on to Sprint 2, Acception handling still needs to be implemented and we can begin US 3
+
+###### Team Schedules:
+- Anticipate around 6:30pm meeting time
+
+###### Repository Updates:
+- All changes have been committed on the Dev branch
+- Should wait for others to test on their systems to approve for push to main
+- Still need acception handling before pushing to main branch
+
+
+# Sprint Review: 
+
+- Acknowledged that we are very far behind schedule and the team will need to put in more work to catch up
+  - Would like more engagement from more of the team members
+- Tyler, Gabriel, and Chris have agreed to be assigned tasks that need to be done for the next sprint
+- Acception handling still needs to be completed
+- Child tasks need to be implented into jira
+
+Date/Time: 11/30/23
+
+Participants: Tyler, Gabriel, Chris
 
 Notes...
 
 # Sprint Retrospective
 
-Date/Time: 
+Date/Time: 11/30/23
 
-Participants: 
+Participants: Tyler, Gabriel, Chris
 
 Notes...
+
+- Acknowledged that we are very far behind schedule and the team will need to put in more work to catch up
+  - Would like more engagement from more of the team members
+
+# Sprint Planning
+
+Date/Time: November 30, 2023
+
+Participants: Gabriel, Chris, Tyler
+
+Goal Statement:  This sprint we aim to complete user story 3 and user story 4 as well as complete acception handling.  We will accomplish this by making it simple and easy for users to edit tasks that have been submitted as well as allowing users to mark their tasks as either complete or incomplete. 
+
