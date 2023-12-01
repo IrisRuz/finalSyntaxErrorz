@@ -5,59 +5,88 @@ from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from sqlalchemy import func, distinct
-import datetime
-import json
-import bcrypt
+import datetime, json, bcrypt, re
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+def is_valid_email(email):
+    # Basic email format validation using a regular expression
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    return re.match(email_regex, email) is not None
+
 @app.route('/users_signup', methods=['GET', 'POST'])
 def users_signup():
     form = SignUpForm()
-
+    anyErrors = False
     if form.validate_on_submit():
         # Check if the provided passwords match
-        if form.password.data == form.password_confirm.data:
-            # Generate a salt and hash the password using bcrypt
-            salt = bcrypt.gensalt()
-            hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt)
+        if form.password.data != form.password_confirm.data:
+            flash('Passwords do not match', 'error')
+            anyErrors = True
 
-            # Create a new User object and save it to the database 
-            new_user = User(
-                id=form.id.data,
-                email=form.email.data,
-                password=hashed_password, 
-            )
+        # Check if the user ID is already taken
+        existing_user = User.query.filter_by(id=form.id.data).first()
+        if existing_user:
+            flash('ID is already taken', 'error')
+            anyErrors = True
+        
+        # Check if the email is already registered
+        existing_email_user = User.query.filter_by(email=form.email.data).first()
+        if existing_email_user:
+            flash('Email is already registered', 'error')
+            anyErrors = True
 
-            db.session.add(new_user)
-            db.session.commit()
+        # Check if the email is in a valid format
+        if not is_valid_email(form.email.data):
+            flash('Invalid email format', 'error')
+            anyErrors = True
+        
+        if anyErrors:
+            return render_template('users_signup.html', form=form)
 
-            # Redirect to the index page
-            return redirect(url_for('index'))
+        # Generate a salt and hash the password using bcrypt
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(form.password.data.encode('utf-8'), salt)
+
+        # Create a new User object and save it to the database
+        new_user = User(
+            id=form.id.data,
+            email=form.email.data,
+            password=hashed_password,
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        # Redirect to the index page
+        return redirect(url_for('index'))
 
     return render_template('users_signup.html', form=form)
 
-@app.route('/users/signin', methods=['GET', 'POST'])
+@app.route('/users_signin', methods=['GET', 'POST'])
 def users_signin():
     form = SignInForm()
-    if form.validate_on_submit(): 
-        try: 
-            user = load_user(form.id.data)
-            print(user)
-            if bcrypt.checkpw(
-                form.password.data.encode('utf-8'), 
-                user.password
-            ): 
+
+    if form.validate_on_submit():
+        # Check if the user with the provided ID exists in the database
+        user = User.query.filter_by(id=form.id.data).first()
+
+        if user and user.password:
+            # If the user exists and has a password, check the password
+            hashed_password = user.password
+
+            if bcrypt.checkpw(form.password.data.encode('utf-8'), hashed_password):
+                # If the password matches, authenticate the user
                 login_user(user)
-                return redirect(url_for('list_tasks'))
+
+                # Redirect to the "/catalog" page
+                return redirect(url_for('catalog'))
             else:
-                return '<p>Wrong password!</p>'
-        except Exception as ex: 
-                return f'<p>Could not find a user with the given id: {ex}</p>'
-    else:
-        return render_template('users_signin.html', form=form)
+                flash('Invalid password', 'error')
+
+    return render_template('users_signin.html', form=form)
     
 def get_next_task_number():
     # Retrieve the maximum order number from the database and increment it by 1

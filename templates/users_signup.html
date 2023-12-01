@@ -2,6 +2,17 @@
 {% block main %}
     <form action="" method="POST" novalidate>
         {{ form.hidden_tag() }}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                        <p class="error {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <p>{{ form.id.label }} <br> {{ form.id(size=15) }}</p>
         <p>{{ form.email.label }} <br> {{ form.email(size=30) }}</p>
         <p>{{ form.password.label }} <br> {{ form.password(size=30) }}</p>
@@ -9,4 +20,3 @@
         <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}
-

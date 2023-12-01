@@ -1,9 +1,21 @@
 {% extends 'base.html' %}
 {% block main %}
-        <form action="" method="POST" novalidate>
-            {{ form.hidden_tag() }}
-            <p>{{ form.id.label }} <br> {{ form.id(size=15) }}</p>
-            <p>{{ form.password.label }} <br> {{ form.password(size=30) }}</p>
-            <p>{{ form.submit() }}</p>
-        </form>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="flash {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {{ form.hidden_tag() }}
+        <p>{{ form.id.label }} <br> {{ form.id(size=15) }}</p>
+        <p>{{ form.password.label }} <br> {{ form.password(size=30) }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
 {% endblock %}
