@@ -82,6 +82,10 @@ def users_signin():
         # Check if the user with the provided ID exists in the database
         user = User.query.filter_by(id=form.id.data).first()
 
+        if not user:
+            # If the user does not exist, display an error message
+            flash('ID not valid', 'error')
+            
         if user and user.password:
             # If the user exists and has a password, check the password
             hashed_password = user.password
