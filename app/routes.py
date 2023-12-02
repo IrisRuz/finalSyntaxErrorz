@@ -13,7 +13,7 @@ def index():
 
 def is_valid_email(email):
     # Basic email format validation using regex(Regular Expressions)
-    email_regex = r'^[a-zA-Z0-9_.-] + @[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    email_regex = r'^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     return re.match(email_regex, email) is not None
 
 @app.route('/users_signup', methods=['GET', 'POST'])
@@ -90,8 +90,8 @@ def users_signin():
                 # If the password matches, authenticate the user
                 login_user(user)
 
-                # Redirect to the "/catalog" page
-                return redirect(url_for('catalog'))
+                # Redirect to the "/tasks" page
+                return redirect(url_for('list_tasks'))
             else:
                 flash('Invalid password', 'error')
 
@@ -124,6 +124,5 @@ def list_tasks():
 
         flash('Task created successfully!', 'success')
         return redirect(url_for('list_tasks'))
-    else:
-        print(form.errors)
+    
     return render_template('tasks.html', form=form, tasks=user_tasks)
