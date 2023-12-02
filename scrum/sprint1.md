@@ -18,7 +18,8 @@ Participants: Iris, Tyler, Chris, Gabriel, Brendan
   - Need to test to ensure working appropriately
 -	User story two has been started with Iris completing list_task route, class Task, and TaskForm
   - Create_task route still needs to be implemented and testing needs to be completed
-    - 
+    - Tyler created and completed structure files and folders necessary to run app.
+    - Tyler implemented signup route and html 
 ###### Team Schedules:
 - Daily Scrum meeting scheduled for tomorrow at 5:30pm
 
@@ -26,7 +27,7 @@ Participants: Iris, Tyler, Chris, Gabriel, Brendan
 - All changes have been committed on the Dev branch
 - Emphasized pulling the latest changes before any further implementations
 
-## 11/28/23-10pm
+## 11/28/23-6pm
 
 Participants: No meeting today
 
@@ -52,7 +53,7 @@ Participants: Tyler, Gabriel, Chris
 
 ###### User Story Breakdown: 
 
-- Although we can move on to Sprint 2, Acception handling still needs to be implemented and we can begin US 3
+- Although we can move on to Sprint 2, exception handling still needs to be implemented and we can begin US 3
 
 ###### Team Schedules:
 - Anticipate around 6:30pm meeting time

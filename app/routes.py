@@ -12,19 +12,22 @@ def index():
     return render_template('index.html')
 
 def is_valid_email(email):
-    # Basic email format validation using a regular expression
-    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    # Basic email format validation using regex(Regular Expressions)
+    email_regex = r'^[a-zA-Z0-9_.-] + @[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     return re.match(email_regex, email) is not None
 
 @app.route('/users_signup', methods=['GET', 'POST'])
 def users_signup():
     form = SignUpForm()
     anyErrors = False
+
+    # Check if the form has been submitted and if all fields are filled in
+    if form.submit.data and not form.validate():
+        flash('Please fill in all the fields', 'error')
+        return render_template('users_signup.html', form=form)
+
     if form.validate_on_submit():
-        # Check if the provided passwords match
-        if form.password.data != form.password_confirm.data:
-            flash('Passwords do not match', 'error')
-            anyErrors = True
+        # Exception handling cases turn anyErrors to True
 
         # Check if the user ID is already taken
         existing_user = User.query.filter_by(id=form.id.data).first()
@@ -32,17 +35,23 @@ def users_signup():
             flash('ID is already taken', 'error')
             anyErrors = True
         
+        # Check if the email is in a valid format
+        if not is_valid_email(form.email.data):
+            flash('Invalid email format', 'error')
+            anyErrors = True
+
         # Check if the email is already registered
         existing_email_user = User.query.filter_by(email=form.email.data).first()
         if existing_email_user:
             flash('Email is already registered', 'error')
             anyErrors = True
 
-        # Check if the email is in a valid format
-        if not is_valid_email(form.email.data):
-            flash('Invalid email format', 'error')
+        # Check if the password and password confirmation match
+        if form.password.data != form.password_confirm.data:
+            flash('Passwords do not match', 'error')
             anyErrors = True
         
+        # Check for any errors
         if anyErrors:
             return render_template('users_signup.html', form=form)
 
