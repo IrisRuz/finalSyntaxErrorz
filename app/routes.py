@@ -71,7 +71,7 @@ def users_signup():
 
         # Redirect to the index page
         return redirect(url_for('index'))
-
+    
     return render_template('users_signup.html', form=form)
 
 @app.route('/users_signin', methods=['GET', 'POST'])
@@ -130,3 +130,16 @@ def list_tasks():
         return redirect(url_for('list_tasks'))
     
     return render_template('tasks.html', form=form, tasks=user_tasks)
+
+# delete existing tasks
+@app.route('/tasks/delete/<task_id>', methods=['POST'])
+@login_required
+def delete_task(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+    if task:
+        db.session.delete(task)
+        db.session.commit()
+        flash('Task deleted successfully!', 'success')
+    else:
+        flash('Task not found!', 'error')
+    return redirect(url_for('list_tasks'))

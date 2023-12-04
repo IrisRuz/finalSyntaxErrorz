@@ -25,10 +25,15 @@
     {% if tasks %}
         {% for task in tasks %}
             <tr class="item-row">
-                <td>{{ task.id }}</td>
+                <td>{{ loop.index }}</td> <!--Use loop.index to always display starting with 1 -->
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
                 <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     {% else %}
