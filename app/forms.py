@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, PasswordField, SubmitField, validators, EmailField, DateField
-from wtforms.validators import DataRequired, InputRequired
+from wtforms.validators import DataRequired, InputRequired, Length
 
 class SignUpForm(FlaskForm):
     id = StringField('Id', validators=[DataRequired()])
@@ -16,7 +16,7 @@ class SignInForm(FlaskForm):
     submit = SubmitField('Confirm')
 
 class TaskForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired(), Length(max=30)], render_kw={"placeholder": "30 Character Limit"})
+    description = TextAreaField('Description', validators=[DataRequired(), Length(max=300)], render_kw={"placeholder": "300 Character Limit"})
     due_date = DateField('Due Date', format='%Y-%m-%d', validators=[InputRequired()])
     submit = SubmitField("Create Task")

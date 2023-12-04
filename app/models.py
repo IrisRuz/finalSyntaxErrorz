@@ -12,8 +12,9 @@ class User(db.Model, UserMixin):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    title = db.Column(db.String(50), nullable=False)  # Max 50 characters
+    description = db.Column(db.Text, nullable=False)  # Text typically doesn't need length specified
     due_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('tasks'))
+
