@@ -21,15 +21,16 @@ from flask_login import LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-from app.models import User
+from app.models import User, SubUser
 
 # user_loader callback
 @login_manager.user_loader
 def load_user(id):
-    try: 
-        return db.session.query(User).filter(User.id==id).one()
-    except: 
-        return None
+    user = User.query.get(id)
+    if user is None:
+        user = SubUser.query.get(id)
+    return user
+
 
 from app import routes
 
