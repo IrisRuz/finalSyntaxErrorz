@@ -127,22 +127,60 @@ def get_next_task_number():
 @app.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def list_tasks():
-    form = TaskForm()
-    if form.validate_on_submit():
-        new_task = Task(
-            title=form.title.data,
-            description=form.description.data,
-            due_date=form.due_date.data,
-            user_id=current_user.id,
-        )
-        db.session.add(new_task)
-        db.session.commit()
-        flash('Task created successfully!', 'success')
-        return redirect(url_for('list_tasks'))
+    
+    if current_user.is_authenticated:
+        form = TaskForm()
+        # Check and synchronize tasks for subusers with the primary user's tasks
+        if isinstance(current_user, SubUser):
+            primary_user_tasks = Task.query.filter_by(user_id=current_user.user_id).all()
+            subuser_tasks = Task.query.filter_by(sub_user_id=current_user.id).all()
 
-    active_tasks = Task.query.filter_by(user_id=current_user.id, completed=False).all()
-    completed_tasks = Task.query.filter_by(user_id=current_user.id, completed=True).all()
-    return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks)
+            # Create a set of task titles for  comparison
+            primary_user_task_titles = {task.title for task in primary_user_tasks}
+            subuser_task_titles = {task.title for task in subuser_tasks}
+
+            # Add new tasks for the subuser if they dont exist
+            for task in primary_user_tasks:
+                if task.title not in subuser_task_titles:
+                    new_task = Task(
+                        title=task.title,
+                        description=task.description,
+                        due_date=task.due_date,
+                        user_id=current_user.user_id,
+                        sub_user_id=current_user.id
+                    )
+                    db.session.add(new_task)
+                    db.session.commit()
+
+            # Remove tasks that are no longer assigned to the subuser
+            for task in subuser_tasks:
+                if task not in primary_user_tasks:
+                    db.session.delete(task)
+                    db.session.commit()
+                    
+        if form.validate_on_submit():
+            new_task = Task(
+                title=form.title.data,
+                description=form.description.data,
+                due_date=form.due_date.data,
+                user_id=current_user.id,
+            )
+
+            db.session.add(new_task)
+            db.session.commit()
+
+            flash('Task created successfully!', 'success')
+            return redirect(url_for('list_tasks'))
+        
+    if isinstance (current_user, User):
+        active_tasks = Task.query.filter_by(user_id=current_user.id, completed=False).all()
+        completed_tasks = Task.query.filter_by(user_id=current_user.id, completed=True).all()
+
+    elif isinstance (current_user, SubUser):
+        active_tasks = Task.query.filter_by(sub_user_id=current_user.id, completed=False).all()
+        completed_tasks = Task.query.filter_by(sub_user_id=current_user.id, completed=True).all()
+
+    return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks, user=current_user)
 
 # delete existing tasks
 @app.route('/tasks/delete/<task_id>', methods=['POST'])
@@ -157,31 +195,21 @@ def delete_task(task_id):
         flash('Task not found!', 'error')
     return redirect(url_for('list_tasks'))
 
+
 #route for marking tasks complete
 @app.route('/tasks/mark_complete/<int:task_id>', methods=['POST'])
 @login_required
 def mark_task_complete(task_id):
     task = Task.query.get_or_404(task_id)
-    if task.user_id != current_user.id:
+    if task.user_id != current_user.id or task.sub_user_id != current_user.id:
         flash("You do not have permission to modify this task", "error")
         return redirect(url_for('list_tasks'))
-    
-    task.completed = not task.completed
-    db.session.commit()
-    flash('Task status updated.', 'success')
-    return redirect(url_for('list_tasks'))
-
-@app.route('/tasks/complete/<int:task_id>', methods=['POST'])
-@login_required
-def complete_task(task_id):
-    task = Task.query.get_or_404(task_id)
-    if task.user_id != current_user.id:
-        flash("You're not authorized to update this task.", 'error')
+    elif current_user.is_authenticated:
+        task.completed = not task.completed  # Toggle the completion status
+        db.session.commit()
+        flash('Task status updated.', 'success')
         return redirect(url_for('list_tasks'))
-    
-    task.completed = not task.completed  # Toggle the completion status
-    db.session.commit()
-    return redirect(url_for('list_tasks'))
+
 
 @app.route('/tasks/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
@@ -267,5 +295,5 @@ def create_subuser():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
+    flash('You have been logged out.', 'success')
     return redirect(url_for('index'))  # Redirect to the homepage or login page

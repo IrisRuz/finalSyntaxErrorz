@@ -28,5 +28,6 @@ class Task(db.Model):
     sub_user_id = db.Column(db.String, db.ForeignKey('sub_users.id'))  
     user = db.relationship('User', backref=db.backref('tasks'))
     sub_user = db.relationship('SubUser', backref=db.backref('tasks'))
+    completed_by_subuser = db.Column(db.Boolean, default=False)
 
 
