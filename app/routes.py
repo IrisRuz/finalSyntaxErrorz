@@ -6,6 +6,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from sqlalchemy import func, distinct
 import datetime, json, bcrypt, re
+from flask_migrate import Migrate
 
 @app.route('/')
 def index():
@@ -111,25 +112,32 @@ def get_next_task_number():
 @app.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def list_tasks():
-    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
     form = TaskForm()
     if form.validate_on_submit():
         new_task = Task(
-            id = get_next_task_number(),
             title=form.title.data,
             description=form.description.data,
             due_date=form.due_date.data,
             user_id=current_user.id,
-            user = current_user
+            completed=False  # assuming you have a 'completed' field in your Task model
         )
-
         db.session.add(new_task)
         db.session.commit()
-
         flash('Task created successfully!', 'success')
         return redirect(url_for('list_tasks'))
     
-    return render_template('tasks.html', form=form, tasks=user_tasks)
+    # If this is a GET request, just render the page with the form
+    active_tasks = Task.query.filter_by(user_id=current_user.id, completed=False).all()
+    completed_tasks = Task.query.filter_by(user_id=current_user.id, completed=True).all()
+    return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks)
+
+        #db.session.add(new_task)
+        #db.session.commit()
+
+        #flash('Task created successfully!', 'success')
+        #return redirect(url_for('list_tasks'))
+    
+    #return render_template('tasks.html', form=form, tasks=user_tasks)
 
 # delete existing tasks
 @app.route('/tasks/delete/<task_id>', methods=['POST'])
@@ -156,4 +164,16 @@ def mark_task_complete(task_id):
     task.completed = not task.completed
     db.session.commit()
     flash('Task status updated.', 'success')
+    return redirect(url_for('list_tasks'))
+
+@app.route('/tasks/complete/<int:task_id>', methods=['POST'])
+@login_required
+def complete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        flash("You're not authorized to update this task.", 'error')
+        return redirect(url_for('list_tasks'))
+    
+    task.completed = not task.completed  # Toggle the completion status
+    db.session.commit()
     return redirect(url_for('list_tasks'))
