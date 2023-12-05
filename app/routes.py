@@ -261,3 +261,11 @@ def create_subuser():
             # Redirect to the task page
             return redirect(url_for('list_tasks'))
     return render_template('subuser_signup.html', form=form)
+
+#logout route
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('index'))  # Redirect to the homepage or login page
