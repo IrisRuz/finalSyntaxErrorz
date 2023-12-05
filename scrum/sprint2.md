@@ -5,11 +5,16 @@ Date/Time:
 
 Participants:
 
-## 12/1/23-8:00pm
+Goal Statement:  
+
+# Daily Scrums
+
+## 12/1/23 5:26pm
 
 Participants: Tyler, Chris, Brendan
 
 Notes...
+- Tyler implemented sign up exception handling on dev branch and fixed main branch by reverting the major code changes since they were accidentally merged in and transfering notes we have made
 
 - Tyler having trouble pulling the repository 
  - Issue resolved shortly after meeting 
