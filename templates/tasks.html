@@ -24,6 +24,7 @@
         <th>Due Date</th>
         <th>Task Status</th>
         <th>Delete</th>
+        <th>Edit</th>
     </tr>
     <!-- Active tasks loop -->
     {% for task in active_tasks %}
@@ -46,6 +47,10 @@
                         <input type="submit" value="Delete">
                     </form>
                 </td>
+                <td>
+                    <!-- Link to the edit route for this task -->
+                    <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                </td>
             </tr>
         {% endif %}
     {% else %}
@@ -65,6 +70,7 @@
         <th>Due Date</th>
         <th>Task Status</th>
         <th>Delete</th>
+        <th>Edit</th>
     </tr>
     <!-- Completed tasks loop -->
     {% for task in completed_tasks %}
@@ -80,6 +86,10 @@
                         {{ form.hidden_tag() }}
                         <input type="submit" value="Delete">
                     </form>
+                </td>
+                <td>
+                    <!-- Link to the edit route for this task -->
+                    <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
                 </td>
             </tr>
         {% endif %}

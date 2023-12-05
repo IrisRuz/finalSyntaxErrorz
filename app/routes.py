@@ -177,3 +177,22 @@ def complete_task(task_id):
     task.completed = not task.completed  # Toggle the completion status
     db.session.commit()
     return redirect(url_for('list_tasks'))
+
+@app.route('/tasks/edit/<int:task_id>', methods=['GET', 'POST'])
+@login_required
+def edit_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        flash("You're not authorized to edit this task.", 'error')
+        return redirect(url_for('list_tasks'))
+    
+    form = TaskForm(obj=task)  # Pre-populate the form with the task data
+    if form.validate_on_submit():
+        task.title = form.title.data
+        task.description = form.description.data
+        task.due_date = form.due_date.data
+        db.session.commit()
+        flash('Task updated successfully!', 'success')
+        return redirect(url_for('list_tasks'))
+    
+    return render_template('edit_task.html', form=form, task_id=task.id)
