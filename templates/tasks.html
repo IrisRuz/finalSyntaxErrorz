@@ -33,7 +33,7 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
-                <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ task.due_date.strftime('%m-%d-%Y') }}</td>
                 <td>
                     <form action="{{ url_for('mark_task_complete', task_id=task.id) }}" method="post">
                         {{ form.hidden_tag() }}
