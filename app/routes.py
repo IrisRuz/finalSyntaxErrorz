@@ -143,3 +143,17 @@ def delete_task(task_id):
     else:
         flash('Task not found!', 'error')
     return redirect(url_for('list_tasks'))
+
+#route for marking tasks complete
+@app.route('/tasks/mark_complete/<int:task_id>', methods=['POST'])
+@login_required
+def mark_task_complete(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.user_id != current_user.id:
+        flash("You do not have permission to modify this task", "error")
+        return redirect(url_for('list_tasks'))
+    
+    task.completed = not task.completed
+    db.session.commit()
+    flash('Task status updated.', 'success')
+    return redirect(url_for('list_tasks'))

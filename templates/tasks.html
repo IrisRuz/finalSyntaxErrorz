@@ -21,6 +21,9 @@
         <th>Task</th>
         <th>Description</th>
         <th>Due Date</th>
+        <th>Task Status</th>
+        <th>Delete</th>   
+
     </tr>
     {% if tasks %}
         {% for task in tasks %}
@@ -29,6 +32,12 @@
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
                 <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <form action="{{ url_for('mark_task_complete', task_id=task.id) }}" method="post">
+                        <input type="checkbox" name="completed" id="checkbox-{{ task.id }}" onchange="this.form.submit();" {{ 'checked' if task.completed }}>
+                        <label for="checkbox-{{ task.id }}">Complete</label>
+                    </form>
+                </td>
                 <td>
                     <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
                         <input type="submit" value="Delete">
