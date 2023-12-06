@@ -1,4 +1,4 @@
-from app import app, db, load_user
+from app import app, db
 from app.models import User, Task
 from app.forms import SignUpForm, SignInForm, TaskForm
 from flask import render_template, redirect, url_for, request, flash
@@ -6,7 +6,6 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from sqlalchemy import func, distinct
 import datetime, json, bcrypt, re
-from flask_migrate import Migrate
 
 @app.route('/')
 def index():
