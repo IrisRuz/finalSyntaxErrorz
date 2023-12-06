@@ -131,8 +131,14 @@ def list_tasks():
     
     if current_user.is_authenticated:
         form = TaskForm()
+        user = None
+        subuser = None
+
         # Check and synchronize tasks for subusers with the primary user's tasks
+        if isinstance(current_user, User):
+            user = current_user
         if isinstance(current_user, SubUser):
+            subuser = current_user
             primary_user_tasks = Task.query.filter_by(sub_user_id=current_user.user_id).all()
             subuser_tasks = Task.query.filter_by(sub_user_id=current_user.id).all()
 
@@ -183,7 +189,7 @@ def list_tasks():
             active_tasks = Task.query.filter_by(sub_user_id=current_user.id, completed=False).all()
             completed_tasks = Task.query.filter_by(sub_user_id=current_user.id, completed=True).all()
 
-        return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks, user=current_user)
+        return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks, subuser=subuser, user=user)
 
 # delete existing tasks
 @app.route('/tasks/delete/<task_id>', methods=['POST'])
