@@ -163,9 +163,18 @@ def list_tasks():
             # Delete tasks that are no longer present in the primary user's task list
             for subuser_task in subuser_tasks:
                 if subuser_task.title not in primary_user_task_titles:
-                    db.session.delete(subuser_task)
+                    db.session.delete(subuser_task) 
                     db.session.commit()
 
+            # Check to see if description or due date has changed
+            for subuser_task in subuser_tasks:
+                for primary_user_task in primary_user_tasks:
+                    if subuser_task.title == primary_user_task.title:
+                        if subuser_task.description != primary_user_task.description or subuser_task.due_date != primary_user_task.due_date:
+                            subuser_task.description = primary_user_task.description
+                            subuser_task.due_date = primary_user_task.due_date
+                            db.session.commit()
+                            
         if form.validate_on_submit():
             new_task = Task(
                 title=form.title.data,
