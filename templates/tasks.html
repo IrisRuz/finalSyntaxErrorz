@@ -24,6 +24,7 @@
         <th>Due Date</th>
         <th>Task Status</th>
         <th>Delete</th>
+        <th>Edit</th>
     </tr>
     <!-- Active tasks loop -->
     {% for task in active_tasks %}
@@ -32,7 +33,7 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
-                <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ task.due_date.strftime('%m-%d-%Y') }}</td>
                 <td>
                     <form action="{{ url_for('mark_task_complete', task_id=task.id) }}" method="post">
                         {{ form.hidden_tag() }}
@@ -45,6 +46,10 @@
                         {{ form.hidden_tag() }}
                         <input type="submit" value="Delete">
                     </form>
+                </td>
+                <td>
+                    <!-- Link to the edit route for this task -->
+                    <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
                 </td>
             </tr>
         {% endif %}
@@ -65,6 +70,7 @@
         <th>Due Date</th>
         <th>Task Status</th>
         <th>Delete</th>
+        <th>Edit</th>
     </tr>
     <!-- Completed tasks loop -->
     {% for task in completed_tasks %}
@@ -81,6 +87,10 @@
                         <input type="submit" value="Delete">
                     </form>
                 </td>
+                <td>
+                    <!-- Link to the edit route for this task -->
+                    <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                </td>
             </tr>
         {% endif %}
     {% else %}
@@ -96,7 +106,19 @@
     <p>{{ form.title.label }} <br> {{ form.title(size=15) }}</p>
     <p>{{ form.description.label }} <br> {{ form.description(size=30) }}</p>
     <p>{{ form.due_date.label }} <br> {{ form.due_date(size=30, type="date", pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}") }}</p>
-    <p>{{ form.submit() }}</p>
+    <div style="display: flex; justify-content: space-between;">
+        <p>{{ form.submit() }}</p>
+    </div>
+</form>
+<form action="{{ url_for('logout') }}" method="get">
+    {{ form.hidden_tag() }}
+    <input type="submit" value="Logout">
 </form>
 
+<script type="text/javascript">
+    function simple_action(target) {
+        window.location = target;
+    }
+</script>
+<a href="{{ url_for('manage_users') }}">Manage Users</a>
 {% endblock %}
