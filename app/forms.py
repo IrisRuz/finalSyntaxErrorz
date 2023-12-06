@@ -26,11 +26,6 @@ class TaskForm(FlaskForm):
     due_date = DateField('Due Date', format='%Y-%m-%d', validators=[InputRequired()])
     submit = SubmitField("Create Task")
 
-from wtforms import StringField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Email, EqualTo
 
-class UserAdminForm(FlaskForm):
-    id = StringField('ID', validators=[DataRequired()])
-    action = SelectField('Action', choices=[('deactivate', 'Deactivate'), ('delete', 'Delete')])
-    submit = SubmitField('Submit')
+
 

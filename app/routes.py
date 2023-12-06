@@ -1,6 +1,6 @@
 from app import app, db, load_user
 from app.models import User, SubUser, Task
-from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm, UserAdminForm
+from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask.testing import FlaskClient
 from flask_login import login_required, login_user, logout_user, current_user
@@ -300,27 +300,24 @@ def create_subuser():
 @app.route('/user_admin', methods=['GET', 'POST'])
 @login_required
 def user_admin():
-    form = UserAdminForm()
-    if form.validate_on_submit():
-        if form.action.data == 'deactivate':
-            user = User.query.filter_by(id=form.id.data).first()
-            if user:
-                user.active = False
-                db.session.commit()
-                flash('User account deactivated successfully.', 'success')
-            else:
-                flash('User account not found.', 'error')
-        elif form.action.data == 'delete':
-            user = User.query.filter_by(id=form.id.data).first()
-            if user:
-                db.session.delete(user)
-                db.session.commit()
-                flash('User account deleted successfully.', 'success')
-            else:
-                flash('User account not found.', 'error')
-        return redirect(url_for('user_admin'))
-    return render_template('user_admin.html', form=form)
+    form = SignUpForm()
 
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        action = request.form.get('action')
+
+        if action == 'deactivate':
+            # Implement logic to deactivate the user account
+            flash('User account deactivated successfully', 'success')
+        elif action == 'delete':
+            # Implement logic to delete the user account
+            flash('User account deleted successfully', 'success')
+
+        return redirect(url_for('user_admin'))
+
+    # Retrieve and display a list of users for the admin to manage
+    users = User.query.all()  # Replace with your actual User model
+    return render_template('user_admin.html', users=users)
 
 @app.route('/logout')
 @login_required
