@@ -206,12 +206,8 @@ def manage_users():
 
 @app.route('/deactivate_user/<user_id>', methods=['POST'])
 @login_required
-def deactivate_user(user_id):  # Change the parameter name to match the route decorator
-    # Check if the current user has the admin role
-    if current_user.id == user_id:  # Change 'current_user' to 'current_user.id'
-        flash('You do not have the necessary permissions to perform this action.', 'error')
-        return redirect(url_for('index'))
-    
+def deactivate_user(user_id):  # Change the parameter name to match the route decorato
+
     user = User.query.get(user_id)
     if user:
         user.is_active = False
@@ -225,14 +221,11 @@ def deactivate_user(user_id):  # Change the parameter name to match the route de
 @app.route('/delete_user/<user_id>', methods=['POST'])
 @login_required
 def delete_user(user_id):  # Change the parameter name to match the route decorator
-    # Check if the current user has the admin role
-    if current_user.id == user_id:  # Change 'current_user' to 'current_user.id'
-        flash('You do not have the necessary permissions to perform this action.', 'error')
-        return redirect(url_for('index'))
+    
     
     user = User.query.get(user_id)
     if user:
-        db.session.delete(user)
+        db.session.delete(user_id)
         db.session.commit()
         flash('User has been deleted successfully.', 'success')
     else:
