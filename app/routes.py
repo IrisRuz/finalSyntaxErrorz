@@ -297,20 +297,33 @@ def create_subuser():
     return render_template('subuser_signup.html', form=form)
 
 
+from flask import abort
+
 @app.route('/user_admin', methods=['GET', 'POST'])
 @login_required
 def user_admin():
-    form = SignUpForm()
+
+    form = SignInForm()
 
     if request.method == 'POST':
         user_id = request.form.get('user_id')
         action = request.form.get('action')
 
+        user_to_manage = User.query.get(user_id)
+
+        if not user_to_manage:
+            flash('User not found.', 'error')
+            return redirect(url_for('user_admin'))
+
         if action == 'deactivate':
             # Implement logic to deactivate the user account
+            user_to_manage.is_active = False  # Change to the appropriate field in your model
+            db.session.commit()
             flash('User account deactivated successfully', 'success')
         elif action == 'delete':
             # Implement logic to delete the user account
+            db.session.delete(user_to_manage)
+            db.session.commit()
             flash('User account deleted successfully', 'success')
 
         return redirect(url_for('user_admin'))
@@ -318,7 +331,6 @@ def user_admin():
     # Retrieve and display a list of users for the admin to manage
     users = User.query.all()  # Replace with your actual User model
     return render_template('user_admin.html', users=users)
-
 @app.route('/logout')
 @login_required
 def logout():
