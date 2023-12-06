@@ -32,4 +32,5 @@ def load_user(id):
     return user
 
 
+from app import routes
 

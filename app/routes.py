@@ -1,6 +1,6 @@
 from app import app, db, load_user
 from app.models import User, SubUser, Task
-from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm
+from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm, UserAdminForm
 from flask import render_template, redirect, url_for, request, flash, jsonify
 from flask.testing import FlaskClient
 from flask_login import login_required, login_user, logout_user, current_user
@@ -297,67 +297,30 @@ def create_subuser():
     return render_template('subuser_signup.html', form=form)
 
 
-@app.route('/manage_users', methods=['GET', 'POST'])
+@app.route('/user_admin', methods=['GET', 'POST'])
 @login_required
-def manage_users():
-    # Check if the current user has the admin role
-    if current_user == id:
-        flash('You do not have the necessary permissions to view this page.', 'error')
-        return redirect(url_for('manage_users'))
-        
-    users = SubUser.query.all()
-    
-    # Use the SubUserSignUpForm to handle subuser creation
-    subuser_form = SubUserSignUpForm()
-    if subuser_form.validate_on_submit():
-        # Process form data and create a new subuser
-        new_subuser = SubUser(
-            id=subuser_form.id.data,
-            email=subuser_form.email.data,
-            name=subuser_form.name.data,
-        )
-        db.session.add(new_subuser)
-        db.session.commit()
-        flash('Subuser has been created successfully.', 'success')
-        return redirect(url_for('manage_users'))
-    
-    return render_template('manage_users.html', users=users, subuser_form=subuser_form)
+def user_admin():
+    form = UserAdminForm()
+    if form.validate_on_submit():
+        if form.action.data == 'deactivate':
+            user = User.query.filter_by(id=form.id.data).first()
+            if user:
+                user.active = False
+                db.session.commit()
+                flash('User account deactivated successfully.', 'success')
+            else:
+                flash('User account not found.', 'error')
+        elif form.action.data == 'delete':
+            user = User.query.filter_by(id=form.id.data).first()
+            if user:
+                db.session.delete(user)
+                db.session.commit()
+                flash('User account deleted successfully.', 'success')
+            else:
+                flash('User account not found.', 'error')
+        return redirect(url_for('user_admin'))
+    return render_template('user_admin.html', form=form)
 
-@app.route('/deactivate_user/<user_id>', methods=['POST'])
-@login_required
-def deactivate_user(user_id):  # Change the parameter name to match the route decorator
-    # Check if the current user has the admin role
-    if current_user.id == user_id:  # Change 'current_user' to 'current_user.id'
-        flash('You do not have the necessary permissions to perform this action.', 'error')
-        return redirect(url_for('index'))
-    
-    user = User.query.get(user_id)
-    if user:
-        user.is_active = False
-        db.session.commit()
-        flash('User has been deactivated successfully.', 'success')
-    else:
-        flash('User not found.', 'error')
-    
-    return redirect(url_for('manage_users'))
-
-@app.route('/delete_user/<user_id>', methods=['POST'])
-@login_required
-def delete_user(user_id):  # Change the parameter name to match the route decorator
-    # Check if the current user has the admin role
-    if current_user.id == user_id:  # Change 'current_user' to 'current_user.id'
-        flash('You do not have the necessary permissions to perform this action.', 'error')
-        return redirect(url_for('index'))
-    
-    user = User.query.get(user_id)
-    if user:
-        db.session.delete(user)
-        db.session.commit()
-        flash('User has been deleted successfully.', 'success')
-    else:
-        flash('User not found.', 'error')
-    
-    return redirect(url_for('manage_users'))
 
 @app.route('/logout')
 @login_required
