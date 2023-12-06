@@ -1,33 +1,67 @@
 {% extends 'base.html' %}
 {% block main %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div>
+                {% for category, message in messages %}
+                    <p class="success {{ category }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
-    <h2>Manage Users</h2>
-    <table>
-        <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>Delete</th>
-            <th>Deactivate</th>
-        </tr>
-        {% for user in users %}
+    {% if subusers %}
+        <h2>Manage Users</h2>
+        <table>
             <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.password }}</td>
-                <td>
-                    <form action="{{ url_for('delete_user', user_id=user.id) }}" method="post">
-                        {{ csrf_token }}
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-                <td>
-                    <form action="{{ url_for('deactivate_user', user_id=user.id) }}" method="post">
-                        {{ csrf_token }}
-                        <input type="submit" value="Deactivate">
-                    </form>
-                </td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for subuser in subusers %}
+                <tr>
+                    <td>{{ subuser.id }}</td>
+                    <td>{{ subuser.name }}</td>
+                    {% if active %}
+                        <td>Active</td>
+                    {% elif inactive %}
+                        <td>Inactive</td>
+                    {% endif %}
+                    <td>
+                        {% if active %}
+                            <form action="{{ url_for('deactivate_subuser', id=subuser.id) }}" method="post">
+                                {{ csrf_token }}
+                                <input type="submit" value="Deactivate">
+                            </form>
+                        {% elif inactive %}
+                            <form action="{{ url_for('reactivate_subuser', id=subuser.id) }}" method="post">
+                                {{ csrf_token }}
+                                <input type="submit" value="Reactivate">
+                            </form>
+                        {% endif %}
+                        <form action="{{ url_for('delete_subuser', id=subuser.id) }}" method="post">
+                            {{ csrf_token }}
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <!-- Display nicely no subusers found and provide a button to take them back to tasks.html -->
+        <p>No subusers found. Would you like to create one?</p>
+
+    {% endif %}
+    <button type="button" class="button" onclick="simple_action('{{ url_for('list_tasks') }}')">Back to Tasks</button>
+    <button type="button" class="button" onclick="simple_action('{{ url_for('create_subuser') }}')">Create a New SubUser</button>
+    <button type="button" class="button" onclick="simple_action('{{ url_for('logout') }}')">Logout</button>
+
+
+
+    <script type="text/javascript">
+        function simple_action(target) {
+            window.location = target;
+        }
+    </script>
 {% endblock %}

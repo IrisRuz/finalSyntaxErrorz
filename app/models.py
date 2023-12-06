@@ -15,6 +15,7 @@ class SubUser(db.Model, UserMixin):
     email = db.Column(db.String, unique=True, nullable=False)
     name = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     
                   

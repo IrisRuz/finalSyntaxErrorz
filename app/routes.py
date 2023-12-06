@@ -174,7 +174,7 @@ def list_tasks():
                             subuser_task.description = primary_user_task.description
                             subuser_task.due_date = primary_user_task.due_date
                             db.session.commit()
-                            
+
         if form.validate_on_submit():
             new_task = Task(
                 title=form.title.data,
@@ -302,6 +302,7 @@ def create_subuser():
                 email=form.email.data,
                 password=hashed_password,
                 user_id=current_user.id,
+                status= True
             )
 
             db.session.add(new_subuser)
@@ -315,63 +316,63 @@ def create_subuser():
 @app.route('/manage_users', methods=['GET', 'POST'])
 @login_required
 def manage_users():
-    # Check if the current user has the admin role
-    if current_user == id:
-        flash('You do not have the necessary permissions to view this page.', 'error')
-        return redirect(url_for('manage_users'))
-        
-    users = SubUser.query.all()
-    
-    # Use the SubUserSignUpForm to handle subuser creation
-    subuser_form = SubUserSignUpForm()
-    if subuser_form.validate_on_submit():
-        # Process form data and create a new subuser
-        new_subuser = SubUser(
-            id=subuser_form.id.data,
-            email=subuser_form.email.data,
-            name=subuser_form.name.data,
-        )
-        db.session.add(new_subuser)
-        db.session.commit()
-        flash('Subuser has been created successfully.', 'success')
-        return redirect(url_for('manage_users'))
-    
-    return render_template('manage_users.html', users=users, subuser_form=subuser_form)
+    # Allow primary users to view and manage subusers including deleting deactivating, and reactivating; Filter by primary user id 
+    if isinstance(current_user, User):
+        subusers = SubUser.query.filter_by(user_id=current_user.id).all()
+        # query all subusers status's
+        active = SubUser.query.filter_by(status=True).all()
+        inactive = SubUser.query.filter_by(status=False).all()
 
-@app.route('/deactivate_user/<user_id>', methods=['POST'])
-@login_required
-def deactivate_user(user_id):  # Change the parameter name to match the route decorator
-    # Check if the current user has the admin role
-    if current_user.id == user_id:  # Change 'current_user' to 'current_user.id'
+        return render_template('manage_users.html', subusers=subusers, active=active, inactive=inactive)
+    else:
         flash('You do not have the necessary permissions to perform this action.', 'error')
         return redirect(url_for('index'))
-    
-    user = User.query.get(user_id)
-    if user:
-        user.is_active = False
+
+@app.route('/deactivate_subuser/<id>', methods=['POST'])
+@login_required
+def deactivate_subuser(id):
+    subuser = SubUser.query.get(id)
+    print(subuser)
+    print(subuser.status)
+    if subuser.user_id == current_user.id:
+        # Deactivate the subuser
+        subuser.status = False
         db.session.commit()
-        flash('User has been deactivated successfully.', 'success')
+        print(subuser.status)
+        flash(f'Subuser {subuser.name} has been deactivated.', 'success')
     else:
-        flash('User not found.', 'error')
-    
+        flash('Invalid action or permission denied.', 'error')
     return redirect(url_for('manage_users'))
 
-@app.route('/delete_user/<user_id>', methods=['POST'])
+@app.route('/reactivate_subuser/<id>', methods=['POST'])
 @login_required
-def delete_user(user_id):  # Change the parameter name to match the route decorator
-    # Check if the current user has the admin role
-    if current_user.id == user_id:  # Change 'current_user' to 'current_user.id'
-        flash('You do not have the necessary permissions to perform this action.', 'error')
-        return redirect(url_for('index'))
-    
-    user = User.query.get(user_id)
-    if user:
-        db.session.delete(user)
+def reactivate_subuser(id):
+    subuser = SubUser.query.get(id)
+    print(subuser)
+    print(subuser.status)
+    if subuser.user_id == current_user.id:
+        # Reactivate the subuser
+        subuser.status = True
         db.session.commit()
-        flash('User has been deleted successfully.', 'success')
+        print(subuser.status)
+        flash(f'Subuser {subuser.name} has been reactivated.', 'success')
     else:
-        flash('User not found.', 'error')
-    
+        flash('Invalid action or permission denied.', 'error')
+    return redirect(url_for('manage_users'))
+
+@app.route('/delete_subuser/<id>', methods=['POST'])
+@login_required
+def delete_subuser(id):
+    subuser = SubUser.query.get(id)
+
+    if subuser and subuser.user_id == current_user.id:
+        # Delete the subuser
+        db.session.delete(subuser)
+        db.session.commit()
+        flash(f'Subuser {subuser.name} has been deleted.', 'success')
+    else:
+        flash('Invalid action or permission denied.', 'error')
+
     return redirect(url_for('manage_users'))
 
 @app.route('/logout')
