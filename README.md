@@ -56,8 +56,9 @@ Feel free to use your own format for this section, as long as you are able to co
 
 # Testing 
 
-|Test|Name|Start|End|Pass/Fail|Coverage|
-|White Box Test|Mark Task Complete|12/06|12/07|Pass|App/Routes 32%|
+| Test             | Name             | Start | End   | Pass  | Coverage      |
+|------------------|------------------|-------|-------|-------|---------------|
+| White Box Test   | Mark Task Complete | 12/06 | 12/07 | Pass  | App/Routes 32% |
 
 # Deployment 
 
