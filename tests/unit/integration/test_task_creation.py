@@ -1,3 +1,9 @@
+'''
+CS3250 - Software Development Methods and Tools - Project 3 Final
+Team:SyntaxErrorz
+Description: Project 3 User Task Management
+'''
+
 # test_task_creation.py
 import pytest
 from flask_bcrypt import Bcrypt
