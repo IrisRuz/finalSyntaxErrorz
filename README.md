@@ -56,7 +56,8 @@ Feel free to use your own format for this section, as long as you are able to co
 
 # Testing 
 
-Share in this section the results of the tests performed to attest to the quality of the developed product, including the coverage of the tests in relation to the written code. There is no minimum code coverage expectation for your tests, other than expecting "some" coverage through at least one white-box and one black-box test.
+|Test|Name|Start|End|Pass/Fail|Coverage|
+|White Box Test|Mark Task Complete|12/06|12/07|Pass|App/Routes 32%|
 
 # Deployment 
 
