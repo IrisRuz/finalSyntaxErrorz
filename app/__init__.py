@@ -1,6 +1,5 @@
 from flask import Flask
 import os
-from flask_migrate import Migrate
 
 app = Flask("Authentication Web App")
 app.secret_key = os.environ['SECRET_KEY']
@@ -10,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db.init_app(app)
-migrate = Migrate(app, db)
 
 from app import models
 with app.app_context(): 

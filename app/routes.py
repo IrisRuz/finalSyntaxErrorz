@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+from app import app, db
+from app.models import User, Task
+from app.forms import SignUpForm, SignInForm, TaskForm
+=======
 from app import app, db, load_user
 from app.models import User, SubUser, Task
 from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm
@@ -7,7 +12,6 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from sqlalchemy import func, distinct
 import datetime, json, bcrypt, re
-from flask_migrate import Migrate
 
 @app.route('/')
 def index():
