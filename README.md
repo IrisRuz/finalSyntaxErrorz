@@ -35,7 +35,7 @@ Our web app aims to provide a user-friendly task management system to help indiv
 
 #### UML Class
 
-![UML Class](pics/UMLClass1.png)
+![UML Class](pics/uml2.png)
 
 #### Use Case
 
