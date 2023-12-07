@@ -1,3 +1,9 @@
+'''
+CS3250 - Software Development Methods and Tools - Project 3 Final
+Team:SyntaxErrorz
+Description: Project 3 User Task Management
+'''
+
 from app import db
 from flask_login import UserMixin
 from datetime import datetime
