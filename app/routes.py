@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 from app import app, db
 from app.models import User, Task
 from app.forms import SignUpForm, SignInForm, TaskForm
-=======
 from app import app, db, load_user
 from app.models import User, SubUser, Task
 from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm
