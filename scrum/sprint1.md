@@ -1,6 +1,6 @@
 # Sprint Planning
 
-Date/Time: November 26, 2023
+# Date/Time: November 26, 2023
 
 Participants: Gabriel, Brendan, Chris, Tyler, Iris
 
@@ -45,6 +45,9 @@ Participants: No meeting today
 - All changes have been committed on the Dev branch
 - Should wait for others to test on their systems to approve for push to main
 
+# 11/29/23-
+- No participants
+
 ## 11/30/23-7pm
 
 Participants: Tyler, Gabriel, Chris
@@ -53,15 +56,22 @@ Participants: Tyler, Gabriel, Chris
 
 ###### User Story Breakdown: 
 
-- Although we can move on to Sprint 2, exception handling still needs to be implemented and we can begin US 3
+- Although we can move on to Sprint 2, exception handling still needs to be implemented in previous user stories and we can begin US 3
 
 ###### Team Schedules:
 - Anticipate around 6:30pm meeting time
 
 ###### Repository Updates:
 - All changes have been committed on the Dev branch
+  - # US#1
+    - Tyler got the project started and set up folder to initialize app and verify signup. Started signin route and html
+    - Iris finished signin implementation and html 
+  - # US#2
+    - Iris created a model and form
+    - Chris implemented edit task html & route
+    - Tyler created initial template and merged template to be done on one page, create task route, and modified html to accomodate respective implements
 - Should wait for others to test on their systems to approve for push to main
-- Still need acception handling before pushing to main branch
+- Still need exception handling before pushing to main branch
 
 
 # Sprint Review: 
@@ -72,11 +82,6 @@ Participants: Tyler, Gabriel, Chris
 - Acception handling still needs to be completed
 - Child tasks need to be implented into jira
 
-Date/Time: 11/30/23
-
-Participants: Tyler, Gabriel, Chris
-
-Notes...
 
 # Sprint Retrospective
 
@@ -95,5 +100,5 @@ Date/Time: November 30, 2023
 
 Participants: Gabriel, Chris, Tyler
 
-Goal Statement:  This sprint we aim to complete user story 3 and user story 4 as well as complete acception handling.  We will accomplish this by making it simple and easy for users to edit tasks that have been submitted as well as allowing users to mark their tasks as either complete or incomplete. 
+Goal Statement:  For sprint 2 we aim to complete user story 3 and user story 4 as well as complete exception handling for previous user stories.  We will accomplish this by making it simple and easy for users to edit tasks that have been submitted as well as allowing users to mark their tasks as either complete or incomplete. 
 
