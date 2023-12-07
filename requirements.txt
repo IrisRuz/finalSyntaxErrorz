@@ -1,3 +1,9 @@
+'''
+CS3250 - Software Development Methods and Tools - Project 3 Final
+Team:SyntaxErrorz
+Description: Project 3 User Task Management
+'''
+
 bcrypt==4.0.1
 blinker==1.6.2
 click==8.1.7
