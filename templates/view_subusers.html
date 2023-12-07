@@ -11,21 +11,31 @@
     {% endwith %}
 
     {% if subusers %}
-        <h2>View Subusers and Their Tasks</h2>
-        {% for subuser in subusers %}
-            <div>
-                <h3>{{ subuser.name }} (ID: {{ subuser.id }})</h3>
-                {% if subusers_tasks[subuser.id] %}
-                    <ul>
-                        {% for task in subusers_tasks[subuser.id] %}
-                            <li>{{ task.title }} - {% if task.completed %}Completed{% else %}Pending{% endif %}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No tasks found for this subuser.</p>
-                {% endif %}
-            </div>
-        {% endfor %}
+        <h2>Subusers and Their Tasks</h2>
+        <table>
+            <tr>
+                <th>Subuser Name</th>
+                <th>Subuser ID</th>
+                <th>Tasks</th>
+            </tr>
+            {% for subuser in subusers %}
+                <tr>
+                    <td>{{ subuser.name }}</td>
+                    <td>{{ subuser.id }}</td>
+                    <td>
+                        {% if subusers_tasks[subuser.id] %}
+                            <ul>
+                                {% for task in subusers_tasks[subuser.id] %}
+                                    <li>{{ task.title }} - {% if task.completed %}Completed{% else %}Pending{% endif %}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            No tasks found.
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     {% else %}
         <p>No subusers found. Would you like to create one?</p>
         <button type="button" class="button" onclick="window.location.href = '{{ url_for('create_subuser') }}'">Create a New SubUser</button>

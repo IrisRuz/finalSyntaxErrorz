@@ -200,18 +200,29 @@ def list_tasks():
 
         return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks, subuser=subuser, user=user)
 
-# delete existing tasks
-@app.route('/tasks/delete/<task_id>', methods=['POST'])
+@app.route('/tasks/delete/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
-    task = Task.query.filter_by(id=task_id).first()
-    if task:
+    task = Task.query.get_or_404(task_id)
+
+    # Ensure that only the primary user or the owner of the task can delete it
+    if task.user_id == current_user.id or (task.sub_user_id and task.sub_user_id == current_user.id):
+        
+        # If the current user is the primary user, delete all related subuser tasks
+        if task.user_id == current_user.id and task.completed:
+            related_subuser_tasks = Task.query.filter_by(title=task.title, user_id=task.user_id).all()
+            for sub_task in related_subuser_tasks:
+                db.session.delete(sub_task)
+
+        # Delete the primary user's task
         db.session.delete(task)
         db.session.commit()
         flash('Task deleted successfully!', 'success')
     else:
-        flash('Task not found!', 'error')
+        flash('You do not have permission to delete this task', 'error')
+    
     return redirect(url_for('list_tasks'))
+
 
 
 #route for marking tasks complete use unique IDS to prevent altering other users tasks
