@@ -337,7 +337,19 @@ def create_subuser():
 
             db.session.add(new_subuser)
             db.session.commit()
-
+            # If primary user already has tasks prior to subuser creation, create tasks for subuser
+            if isinstance(current_user, User):
+                primary_user_tasks = Task.query.filter_by(sub_user_id=current_user.id).all()
+                for task in primary_user_tasks:
+                    new_task = Task(
+                        title=task.title,
+                        description=task.description,
+                        due_date=task.due_date,
+                        user_id=current_user.id,
+                        sub_user_id=new_subuser.id
+                    )
+                    db.session.add(new_task)
+                    db.session.commit()
             # Redirect to the task page
             return redirect(url_for('list_tasks'))
     return render_template('subuser_signup.html', form=form)
