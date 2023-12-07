@@ -1,3 +1,9 @@
+'''
+CS3250 - Software Development Methods and Tools - Fall 2023
+Team: Team Syntax Errorz
+Description: Final Project
+'''
+
 from app import app, db
 from app.models import User, Task
 from app.forms import SignUpForm, SignInForm, TaskForm
