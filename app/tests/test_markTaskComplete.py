@@ -3,7 +3,6 @@ from app import app, db
 from app.models import User, Task
 from flask_login import login_user
 import bcrypt
-from bs4 import BeautifulSoup
 
 class TaskRouteTestCase(unittest.TestCase):
 
