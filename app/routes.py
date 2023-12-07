@@ -97,7 +97,8 @@ def users_signin():
 
         # Check the password for regular users
         if user and user.password:
-            hashed_password = user.password
+            # Make sure hashed_password is in bytes
+            hashed_password = user.password.encode('utf-8') if isinstance(user.password, str) else user.password
 
             if bcrypt.checkpw(form.password.data.encode('utf-8'), hashed_password):
                 # If the password matches, authenticate the regular user
@@ -110,7 +111,8 @@ def users_signin():
 
         # Check the password for sub-users
         if subuser and subuser.password:
-            hashed_password = subuser.password
+            # Make sure hashed_password is in bytes
+            hashed_password = subuser.password.encode('utf-8') if isinstance(subuser.password, str) else subuser.password
 
             if bcrypt.checkpw(form.password.data.encode('utf-8'), hashed_password):
                 # If the password matches, authenticate the sub-user
@@ -122,13 +124,6 @@ def users_signin():
                 flash('Invalid password', 'error')
 
     return render_template('users_signin.html', form=form)
-    
-def get_next_task_number():
-    # Retrieve the maximum order number from the database and increment it by 1
-    max_task_number = db.session.query(func.max(Task.id)).scalar()
-    if max_task_number is None:
-        max_task_number = 0
-    return max_task_number + 1
 
 @app.route('/tasks', methods=['GET', 'POST'])
 @login_required
