@@ -52,12 +52,13 @@ This section should be used to describe how the scrum methodology was used in th
 |Sprint#|Goals|Start|End|Done|Observations|
 |---|---|---|---|---|---|
 |1|US#1, US#2,|mm/dd/23|mm/dd/23|US#1|...|
-|Sprint 1|Define user stories, design models, break down user stories into tasks, aim to complete US 1 & 2, create branches|Start: 11/14/2023|End: 11/17/2023|Done: 11/17/2023|Observations: breaking the big tasks into smaller jobs, which makes it easier to do step by step|
-|Sprint 2|A task is able to be made, edited, and deleted, aim to complete US 2 & 3|Start: 11/17/2023|End: 11/22/2023|Done: 11/22/2023|Observations: |
-|Sprint 3|A primary user that registers under sign up can create new users after logging in that are sub-users able to see the primary user's tasks, aim to complete US 3 & 4|Start: 11/24/2023|End: 11/28/2023|Done:11/27/2023|Observations|
-|Sprint 4| A task can be marked as completed, removed from the main list of tasks, and viewed later on in a separate section of tasks, aim to complete US 4 & 5|Start: 11/27/2023|End: 11/29/2023|Done: 11/29/2023|Observations|
-|Sprint 5| Each sub-user can see their unique instance of tasks as well as mark them as complete without affecting any other user or sub user. The task list stays up to date and remembers whether a task was marked as completed, aim to complete US 5 & 6|Start: 11/29/2023|End: 12/02/2023|Done: 12/02/2023|Observations|
-|Sprint 6| Admin user can select certain sub users to view each tasks, deactivate a sub users account, reactivate a subuser account, and view all of the completed tasks by subusers including their account id and date completed, aim to complete US 6|Start: 11/02/2023|End: 11/06/2023|Done: 11/07/2023|Observations|
+|Sprint 1|Define user stories, design models, break down user stories into tasks, aim to complete US 1 & 2, create dev branch|11/14/2023|11/29/2023|11/29/2023|Observations: The majority of the group has not touched the project and this was discussed in meetings on several occasions|
+
+|Sprint 2|Finish implementing exception handling on US1 & 2, as well as complete US 3 & 4|11/30/2023|12/3/2023|12/3/2023|Observations: This sprint was a struggle still and there was no participation this sprint from Iris, Gabriel, or Brendan;Tyler and Chris found it helpful to assign each other tasks and rely on each other in order starting getting more work done due to the lack luster performance so far from team.|
+
+|Sprint 3| Finish touching up US #2-#4 and start and finish US #5 & 6|12/4/2023|12/7/2023|12/7/2023|Observations: This sprint had a little bit of participation from all members to complete finish touches on the project and was the best sprint by far|
+
+
 
 Use the observations column to report problems encountered during a sprint and/or to reflect on how the team has continuously improved its work.
 
