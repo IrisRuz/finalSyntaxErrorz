@@ -3,6 +3,7 @@ from app import app, db
 from app.models import User, Task
 from flask_login import login_user
 import bcrypt
+from bs4 import BeautifulSoup
 
 class TaskRouteTestCase(unittest.TestCase):
 
@@ -23,12 +24,12 @@ class TaskRouteTestCase(unittest.TestCase):
         soup = BeautifulSoup(login_page_response.data, 'html.parser')
         csrf_token = soup.find('input', id='csrf_token')['value']
 
-
         login_response = self.app.post('/users_signin', data={
             'id': 'testuser',  
             'password': 'testpassword',
             'csrf_token': csrf_token
         }, follow_redirects=True)
+
         print("login response:", login_response.data)
         print("Login response status code:", login_response.status_code)
         print("Login response data:", login_response.data.decode('utf-8'))
