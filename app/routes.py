@@ -381,3 +381,19 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'success')
     return redirect(url_for('index'))  # Redirect to the homepage or login page
+
+@app.route('/view_subusers')
+@login_required
+def view_subusers():
+    # Check if the current user is a primary user
+    if not isinstance(current_user, User):
+        flash('You are not authorized to access this page.', 'error')
+        return redirect(url_for('index'))
+
+    # Retrieve all subusers created by the primary user
+    subusers = SubUser.query.filter_by(user_id=current_user.id).all()
+
+    # Retrieve tasks for each subuser
+    subusers_tasks = {subuser.id: Task.query.filter_by(sub_user_id=subuser.id).all() for subuser in subusers}
+
+    return render_template('view_subusers.html', subusers=subusers, subusers_tasks=subusers_tasks)
