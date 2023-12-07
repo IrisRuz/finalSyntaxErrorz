@@ -39,7 +39,7 @@ Our web app aims to provide a user-friendly task management system to help indiv
 
 #### Use Case
 
-![UML Class](pics/UseCase.png)
+![UML Class](pics/usecase3.png)
 
 # Development Process 
 
