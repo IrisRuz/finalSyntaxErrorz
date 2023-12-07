@@ -1,3 +1,9 @@
+'''
+CS3250 - Software Development Methods and Tools - Project 3 Final
+Team:SyntaxErrorz
+Description: Project 3 User Task Management
+'''
+
 import unittest
 from app import app, db
 #from routes import users_signup
