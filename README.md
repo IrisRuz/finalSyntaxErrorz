@@ -43,6 +43,7 @@ Our web app aims to provide a user-friendly task management system to help indiv
 
 #### User Story Diagram #6
 
+![us#6diagram](https://github.com/IrisRuz/finalSyntaxErrorz/assets/123419631/78f05fd6-219e-4c43-a4ea-73da10768d9c)
 
 # Development Process 
 
