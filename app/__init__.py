@@ -1,6 +1,5 @@
 from flask import Flask
 import os
-from flask_migrate import Migrate
 
 app = Flask("Authentication Web App")
 app.secret_key = os.environ['SECRET_KEY']
@@ -10,7 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db.init_app(app)
-migrate = Migrate(app, db)
 
 from app import models
 with app.app_context(): 
@@ -21,15 +19,16 @@ from flask_login import LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-from app.models import User
+from app.models import User, SubUser
 
 # user_loader callback
 @login_manager.user_loader
 def load_user(id):
-    try: 
-        return db.session.query(User).filter(User.id==id).one()
-    except: 
-        return None
+    user = User.query.get(id)
+    if user is None:
+        user = SubUser.query.get(id)
+    return user
+
 
 from app import routes
 
