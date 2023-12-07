@@ -1,3 +1,9 @@
+'''
+CS3250 - Software Development Methods and Tools - Project 3 Final
+Team:SyntaxErrorz
+Description: Project 3 User Task Management
+'''
+
 from flask import Flask
 import os
 
