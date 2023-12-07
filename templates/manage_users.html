@@ -23,27 +23,18 @@
                 <tr>
                     <td>{{ subuser.id }}</td>
                     <td>{{ subuser.name }}</td>
-                    {% if active %}
+                    {% if subuser.status == 'Active' %}
                         <td>Active</td>
-                    {% elif inactive %}
+                    {% else %}
                         <td>Inactive</td>
                     {% endif %}
                     <td>
-                        {% if active %}
-                            <form action="{{ url_for('deactivate_subuser', id=subuser.id) }}" method="post">
-                                {{ csrf_token }}
-                                <input type="submit" value="Deactivate">
-                            </form>
-                        {% elif inactive %}
-                            <form action="{{ url_for('reactivate_subuser', id=subuser.id) }}" method="post">
-                                {{ csrf_token }}
-                                <input type="submit" value="Reactivate">
-                            </form>
+                        {% if subuser.status == 'Active' %}
+                            <button type="button" class="button" onclick="simple_action('{{ url_for('deactivate_subuser', id=subuser.id) }}')">Deactivate Subuser</button>
+                        {% else %}
+                            <button type="button" class="button" onclick="simple_action('{{ url_for('reactivate_subuser', id=subuser.id) }}')">Reactivate Subuser</button>
                         {% endif %}
-                        <form action="{{ url_for('delete_subuser', id=subuser.id) }}" method="post">
-                            {{ csrf_token }}
-                            <input type="submit" value="Delete">
-                        </form>
+                        <button type="button" class="button" onclick="simple_action('{{ url_for('delete_subuser', id=subuser.id) }}')">Delete Subuser</button>
                     </td>
                 </tr>
             {% endfor %}

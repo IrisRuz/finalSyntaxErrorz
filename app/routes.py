@@ -83,9 +83,14 @@ def users_signin():
     if form.validate_on_submit():
         # Check if the user with the provided ID exists in both regular users and sub-users
         user = User.query.filter_by(id=form.id.data).first()
-        sub_user = SubUser.query.filter_by(id=form.id.data).first()
+        subuser = SubUser.query.filter_by(id=form.id.data).first()
 
-        if not user and not sub_user:
+        # If subuser deactivated, display error message
+        if subuser and subuser.status == 'Inactive':
+            flash('Subuser is deactivated. Only the primary user can reactivate this account.', 'error')
+            return render_template('users_signin.html', form=form)
+        
+        if not user and not subuser:
             # If neither regular user nor sub-user found, display an error message
             flash('ID not valid', 'error')
             return render_template('users_signin.html', form=form)
@@ -104,12 +109,12 @@ def users_signin():
                 flash('Invalid password', 'error')
 
         # Check the password for sub-users
-        if sub_user and sub_user.password:
-            hashed_password = sub_user.password
+        if subuser and subuser.password:
+            hashed_password = subuser.password
 
             if bcrypt.checkpw(form.password.data.encode('utf-8'), hashed_password):
                 # If the password matches, authenticate the sub-user
-                login_user(sub_user)
+                login_user(subuser)
 
                 # Redirect to the "/tasks" page
                 return redirect(url_for('list_tasks'))
@@ -302,7 +307,7 @@ def create_subuser():
                 email=form.email.data,
                 password=hashed_password,
                 user_id=current_user.id,
-                status= True
+                status= 'Active'
             )
 
             db.session.add(new_subuser)
@@ -319,48 +324,39 @@ def manage_users():
     # Allow primary users to view and manage subusers including deleting deactivating, and reactivating; Filter by primary user id 
     if isinstance(current_user, User):
         subusers = SubUser.query.filter_by(user_id=current_user.id).all()
-        # query all subusers status's
-        active = SubUser.query.filter_by(status=True).all()
-        inactive = SubUser.query.filter_by(status=False).all()
-
-        return render_template('manage_users.html', subusers=subusers, active=active, inactive=inactive)
+        return render_template('manage_users.html', subusers=subusers)
     else:
         flash('You do not have the necessary permissions to perform this action.', 'error')
         return redirect(url_for('index'))
 
-@app.route('/deactivate_subuser/<id>', methods=['POST'])
+@app.route('/deactivate_subuser/<id>', methods=['GET', 'POST'])
 @login_required
 def deactivate_subuser(id):
     subuser = SubUser.query.get(id)
-    print(subuser)
-    print(subuser.status)
     if subuser.user_id == current_user.id:
         # Deactivate the subuser
-        subuser.status = False
+        subuser.status = "Inactive"
         db.session.commit()
-        print(subuser.status)
         flash(f'Subuser {subuser.name} has been deactivated.', 'success')
     else:
         flash('Invalid action or permission denied.', 'error')
+
     return redirect(url_for('manage_users'))
 
-@app.route('/reactivate_subuser/<id>', methods=['POST'])
+@app.route('/reactivate_subuser/<id>', methods=['GET', 'POST'])
 @login_required
 def reactivate_subuser(id):
     subuser = SubUser.query.get(id)
-    print(subuser)
-    print(subuser.status)
     if subuser.user_id == current_user.id:
         # Reactivate the subuser
-        subuser.status = True
+        subuser.status = 'Active'
         db.session.commit()
-        print(subuser.status)
         flash(f'Subuser {subuser.name} has been reactivated.', 'success')
     else:
         flash('Invalid action or permission denied.', 'error')
     return redirect(url_for('manage_users'))
 
-@app.route('/delete_subuser/<id>', methods=['POST'])
+@app.route('/delete_subuser/<id>', methods=['GET', 'POST'])
 @login_required
 def delete_subuser(id):
     subuser = SubUser.query.get(id)
