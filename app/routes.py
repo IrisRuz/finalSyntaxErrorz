@@ -181,6 +181,20 @@ def list_tasks():
                             db.session.commit()
 
         if form.validate_on_submit():
+            existingSubusers = SubUser.query.filter_by(user_id=current_user.id).all()
+
+            for subuser in existingSubusers:
+                # Create a new task for each subuser
+                new_task = Task(
+                    title=form.title.data,
+                    description=form.description.data,
+                    due_date=form.due_date.data,
+                    user_id=current_user.id,
+                    sub_user_id=subuser.id
+                )
+
+                db.session.add(new_task)
+                db.session.commit()
             new_task = Task(
                 title=form.title.data,
                 description=form.description.data,
@@ -205,18 +219,29 @@ def list_tasks():
 
         return render_template('tasks.html', form=form, active_tasks=active_tasks, completed_tasks=completed_tasks, subuser=subuser, user=user)
 
-# delete existing tasks
-@app.route('/tasks/delete/<task_id>', methods=['POST'])
+@app.route('/tasks/delete/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
-    task = Task.query.filter_by(id=task_id).first()
-    if task:
+    task = Task.query.get_or_404(task_id)
+
+    # Ensure that only the primary user or the owner of the task can delete it
+    if task.user_id == current_user.id or (task.sub_user_id == current_user.id):
+        
+        # If the current user is the primary user, delete all related subuser tasks
+        if task.user_id == current_user.id:
+            related_subuser_tasks = Task.query.filter_by(title=task.title, user_id=task.user_id).all()
+            for sub_task in related_subuser_tasks:
+                db.session.delete(sub_task)
+
+        # Delete the primary user's task
         db.session.delete(task)
         db.session.commit()
         flash('Task deleted successfully!', 'success')
     else:
-        flash('Task not found!', 'error')
+        flash('You do not have permission to delete this task', 'error')
+    
     return redirect(url_for('list_tasks'))
+
 
 
 #route for marking tasks complete use unique IDS to prevent altering other users tasks
@@ -360,7 +385,6 @@ def reactivate_subuser(id):
 @login_required
 def delete_subuser(id):
     subuser = SubUser.query.get(id)
-
     if subuser and subuser.user_id == current_user.id:
         # Delete the subuser
         db.session.delete(subuser)
@@ -377,3 +401,19 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'success')
     return redirect(url_for('index'))  # Redirect to the homepage or login page
+
+@app.route('/view_subusers')
+@login_required
+def view_subusers():
+    # Check if the current user is a primary user
+    if not isinstance(current_user, User):
+        flash('You are not authorized to access this page.', 'error')
+        return redirect(url_for('index'))
+
+    # Retrieve all subusers created by the primary user
+    subusers = SubUser.query.filter_by(user_id=current_user.id).all()
+
+    # Retrieve tasks for each subuser
+    subusers_tasks = {subuser.id: Task.query.filter_by(sub_user_id=subuser.id).all() for subuser in subusers}
+
+    return render_template('view_subusers.html', subusers=subusers, subusers_tasks=subusers_tasks)
