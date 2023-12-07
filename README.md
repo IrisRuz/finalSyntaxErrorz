@@ -41,6 +41,9 @@ Our web app aims to provide a user-friendly task management system to help indiv
 
 ![UML Class](pics/usecase3.png)
 
+#### User Story Diagram #6
+![UML Class](pics/us#6diagram.png)
+
 # Development Process 
 
 This section should be used to describe how the scrum methodology was used in this project. As a suggestion, include the following table to summarize how the sprints occurred during the development of this project.
