@@ -53,21 +53,12 @@ This section should be used to describe how the scrum methodology was used in th
 |Sprint#|Goals|Start|End|Done|Observations|
 |---|---|---|---|---|---|
 |1|US#1, US#2,|mm/dd/23|mm/dd/23|US#1|...|
-<<<<<<< HEAD
 |Sprint 1|Define user stories, design models, break down user stories into tasks, aim to complete US 1 & 2, create dev branch|11/14/2023|11/29/2023|11/29/2023|Observations: The majority of the group has not touched the project and this was discussed in meetings on several occasions|
 
 |Sprint 2|Finish implementing exception handling on US1 & 2, as well as complete US 3 & 4|11/30/2023|12/3/2023|12/3/2023|Observations: This sprint was a struggle still and there was no participation this sprint from Iris, Gabriel, or Brendan;Tyler and Chris found it helpful to assign each other tasks and rely on each other in order starting getting more work done due to the lack luster performance so far from team.|
 
 |Sprint 3| Finish touching up US #2-#4 and start and finish US #5 & 6|12/4/2023|12/7/2023|12/7/2023|Observations: This sprint had a little bit of participation from all members to complete finish touches on the project and was the best sprint by far|
 
-
-=======
-|Sprint 1|US#1 and US#2 was broken down into tasks in Jira|11/14/2023|11/26/2023|US#1|Team tried to meet daily but had other priorities.  Only one user story completed|
->>>>>>> dev
-
-Use the observations column to report problems encountered during a sprint and/or to reflect on how the team has continuously improved its work.
-
-Feel free to use your own format for this section, as long as you are able to communicate what has been described here.
 
 # Testing 
 
