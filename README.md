@@ -54,9 +54,7 @@ This section should be used to describe how the scrum methodology was used in th
 |---|---|---|---|---|---|
 |1|US#1, US#2,|mm/dd/23|mm/dd/23|US#1|...|
 |Sprint 1|Define user stories, design models, break down user stories into tasks, aim to complete US 1 & 2, create dev branch|11/14/2023|11/29/2023|11/29/2023|Observations: The majority of the group has not touched the project and this was discussed in meetings on several occasions|
-
 |Sprint 2|Finish implementing exception handling on US1 & 2, as well as complete US 3 & 4|11/30/2023|12/3/2023|12/3/2023|Observations: This sprint was a struggle still and there was no participation this sprint from Iris, Gabriel, or Brendan;Tyler and Chris found it helpful to assign each other tasks and rely on each other in order starting getting more work done due to the lack luster performance so far from team.|
-
 |Sprint 3| Finish touching up US #2-#4 and start and finish US #5 & 6|12/4/2023|12/7/2023|12/7/2023|Observations: This sprint had a little bit of participation from all members to complete finish touches on the project and was the best sprint by far|
 
 
