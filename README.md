@@ -1,6 +1,6 @@
 # Overview
 
-Our web app aims to provide a user-friendly task management system to help individuals and teams organize and track their tasks efficiently.  The app will streamline the process of creating, assigning, and monitoring tasks, making collaboration and productivity seamless.  
+Our web application is designed to offer an intuitive task management system, empowering individuals and teams to effortlessly organize and track their tasks with precision. Our goal is to streamline the entire task lifecycle, from creation to assignment and monitoring, fostering seamless collaboration and enhancing overall productivity. Experience the ease of task management as our app transforms the way you work, making organization and teamwork a breeze  
 
 # Design
 
