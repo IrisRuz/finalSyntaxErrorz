@@ -8,7 +8,11 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
+<<<<<<< HEAD
 set VIRTUAL_ENV=C:\Users\AL_Loan\finalSyntaxErrorz\venv
+=======
+set VIRTUAL_ENV=C:\Users\base3\CS2350\finalSyntaxErrorz\venv
+>>>>>>> dev
 
 if not defined PROMPT set PROMPT=$P$G
 
