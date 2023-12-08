@@ -80,3 +80,14 @@ Our main aim in conducting black-box testing for our task management app was to 
 # Deployment 
 
 The final product must demonstrate the integrity of at least 5 of the 6 planned user stories. The final product must be packaged in the form of a docker image. In this section, describe the steps needed to generate that image so that others can deploy the product themselves. All files required for the deployment must be available, including the docker file, source/binary code, external package requirements, data files, images, etc. Instructions on how to create a container from the docker image with parameters such as port mapping, environment variables settings, etc., must be described (if needed). 
+
+Steps to deploy Docker Container:
+
+1. Clone project repository to your local machine
+2. In the project directory, build the docker image (Be sure to have docker installed)
+    - copy into terminal: docker build -t syntaxerroz_v2.1 .
+3. Run the Docker Container
+    - copy into terminal: docker run -d -p 5000:5000 -e SECRET_KEY=SECRET_KEY syntaxerroz_v2.1
+4. With the container running, access the application on a web browser
+    - 'http://localhost:5000'
+
