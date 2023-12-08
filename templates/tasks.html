@@ -12,7 +12,7 @@
     {% endif %}
 {% endwith %}
 <header>
-    <h1>Welcome, {{ current_user.name }}</h1>
+    <h1>Welcome, {{ user.name }}</h1>
     <h2>Active Tasks</h2>
 </header>
 <table>
@@ -23,8 +23,12 @@
         <th>Description</th>
         <th>Due Date</th>
         <th>Task Status</th>
-        <th>Delete</th>
-        <th>Edit</th>
+        <!-- check if user is a subuser -->
+        {% if user %}
+            <th>Delete</th>
+            <th>Edit</th>
+        {% endif %}
+        
     </tr>
     <!-- Active tasks loop -->
     {% for task in active_tasks %}
@@ -33,7 +37,7 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
-                <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
+                <td>{{ task.due_date.strftime('%m-%d-%Y') }}</td>
                 <td>
                     <form action="{{ url_for('mark_task_complete', task_id=task.id) }}" method="post">
                         {{ form.hidden_tag() }}
@@ -41,16 +45,18 @@
                         <label for="checkbox-{{ task.id }}">Mark Complete</label>
                     </form>
                 </td>
-                <td>
-                    <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
-                        {{ form.hidden_tag() }}
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
-                <td>
-                    <!-- Link to the edit route for this task -->
-                    <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
-                </td>
+                {% if user %}
+                    <td>
+                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
+                            {{ form.hidden_tag() }}
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                    <td>
+                        <!-- Link to the edit route for this task -->
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                    </td>
+                {% endif %}
             </tr>
         {% endif %}
     {% else %}
@@ -69,18 +75,21 @@
         <th>Description</th>
         <th>Due Date</th>
         <th>Task Status</th>
-        <th>Delete</th>
-        <th>Edit</th>
+        {% if user %}
+            <th>Delete</th>
+            <th>Edit</th>
+        {% endif %}
     </tr>
     <!-- Completed tasks loop -->
     {% for task in completed_tasks %}
         {% if task.completed %}
             <tr class="item-row">
-                <td>{{ loop.index }}</td>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
-                <td>Completed</td>
+            <td>{{ loop.index }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.due_date.strftime('%Y-%m-%d') }}</td>
+            <td>Completed</td>
+            {% if user %}
                 <td>
                     <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
                         {{ form.hidden_tag() }}
@@ -91,26 +100,39 @@
                     <!-- Link to the edit route for this task -->
                     <a href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
                 </td>
+            {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No completed tasks found.</td>
             </tr>
         {% endif %}
-    {% else %}
-        <tr>
-            <td colspan="6">No completed tasks found.</td>
-        </tr>
     {% endfor %}
 </table>
 
-<h3>Create a New Task</h3>
-<form action="{{ url_for('list_tasks') }}" method="post">
-    {{ form.hidden_tag() }}
-    <p>{{ form.title.label }} <br> {{ form.title(size=15) }}</p>
-    <p>{{ form.description.label }} <br> {{ form.description(size=30) }}</p>
-    <p>{{ form.due_date.label }} <br> {{ form.due_date(size=30, type="date", pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}") }}</p>
-    <div style="display: flex; justify-content: space-between;">
+{% if user %}
+    <h3>Create a New Task</h3>
+    <form action="{{ url_for('list_tasks') }}" method="post">
+        {{ form.hidden_tag() }}
+        <p>{{ form.title.label }} <br> {{ form.title(size=15) }}</p>
+        <p>{{ form.description.label }} <br> {{ form.description(size=30) }}</p>
+        <p>{{ form.due_date.label }} <br> {{ form.due_date(size=30, type="date", pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}") }}</p>
         <p>{{ form.submit() }}</p>
+        </div>
+    </form>
+{% endif %}
+
+{% if user %}
+    <!-- buttons on bottom right hand corner -->
+    <div class="button-container">
         <button type="button" class="button" onclick="simple_action('{{ url_for('create_subuser') }}')">Create a New SubUser</button>
+        <button type="button" class="button" onclick="simple_action('{{ url_for('manage_users') }}')">Manage SubUsers</button>
+        <button type="button" class="button" onclick="simple_action('{{ url_for('view_subusers') }}')">View Subusers & Tasks</button>
+
     </div>
-</form>
+{% endif %}
+
+
 <form action="{{ url_for('logout') }}" method="get">
     {{ form.hidden_tag() }}
     <input type="submit" value="Logout">
@@ -121,5 +143,5 @@
         window.location = target;
     }
 </script>
-
 {% endblock %}
+    

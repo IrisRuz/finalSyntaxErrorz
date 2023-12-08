@@ -8,16 +8,17 @@ class User(db.Model, UserMixin):
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-
-
+    
 class SubUser(db.Model, UserMixin):
     __tablename__ = 'sub_users'
     id = db.Column(db.String, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     name = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     
+                  
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), nullable=False)
@@ -29,5 +30,4 @@ class Task(db.Model):
     user = db.relationship('User', backref=db.backref('tasks'))
     sub_user = db.relationship('SubUser', backref=db.backref('tasks'))
     completed_by_subuser = db.Column(db.Boolean, default=False)
-
 
