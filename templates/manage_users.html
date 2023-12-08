@@ -17,6 +17,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Status</th>
+                <th>Tasks</th>
                 <th>Action</th>
             </tr>
             {% for subuser in subusers %}
@@ -28,6 +29,17 @@
                     {% else %}
                         <td>Inactive</td>
                     {% endif %}
+                    <td>
+                        {% if subusers_tasks[subuser.id] %}
+                            <ul>
+                                {% for task in subusers_tasks[subuser.id] %}
+                                    <li>{{ task.title }} - {% if task.completed %}Completed{% else %}Pending{% endif %}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            No tasks found.
+                        {% endif %}
+                    </td>
                     <td>
                         {% if subuser.status == 'Active' %}
                             <button type="button" class="button" onclick="simple_action('{{ url_for('deactivate_subuser', id=subuser.id) }}')">Deactivate Subuser</button>

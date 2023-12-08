@@ -1,3 +1,12 @@
+'''
+CS3250 - Software Development Methods and Tools - Fall 2023
+Team: Team Syntax Errorz
+Description: Final Project
+'''
+
+from app import app, db
+from app.models import User, Task
+from app.forms import SignUpForm, SignInForm, TaskForm
 from app import app, db, load_user
 from app.models import User, SubUser, Task
 from app.forms import SignUpForm, SubUserSignUpForm, SignInForm, TaskForm
@@ -332,7 +341,19 @@ def create_subuser():
 
             db.session.add(new_subuser)
             db.session.commit()
-
+            # If primary user already has tasks prior to subuser creation, create tasks for subuser
+            if isinstance(current_user, User):
+                primary_user_tasks = Task.query.filter_by(sub_user_id=current_user.id).all()
+                for task in primary_user_tasks:
+                    new_task = Task(
+                        title=task.title,
+                        description=task.description,
+                        due_date=task.due_date,
+                        user_id=current_user.id,
+                        sub_user_id=new_subuser.id
+                    )
+                    db.session.add(new_task)
+                    db.session.commit()
             # Redirect to the task page
             return redirect(url_for('list_tasks'))
     return render_template('subuser_signup.html', form=form)
@@ -344,7 +365,8 @@ def manage_users():
     # Allow primary users to view and manage subusers including deleting deactivating, and reactivating; Filter by primary user id 
     if isinstance(current_user, User):
         subusers = SubUser.query.filter_by(user_id=current_user.id).all()
-        return render_template('manage_users.html', subusers=subusers)
+        subusers_tasks = {subuser.id: Task.query.filter_by(sub_user_id=subuser.id).all() for subuser in subusers}
+        return render_template('manage_users.html', subusers=subusers, subusers_tasks=subusers_tasks)
     else:
         flash('You do not have the necessary permissions to perform this action.', 'error')
         return redirect(url_for('index'))
@@ -396,19 +418,3 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'success')
     return redirect(url_for('index'))  # Redirect to the homepage or login page
-
-@app.route('/view_subusers')
-@login_required
-def view_subusers():
-    # Check if the current user is a primary user
-    if not isinstance(current_user, User):
-        flash('You are not authorized to access this page.', 'error')
-        return redirect(url_for('index'))
-
-    # Retrieve all subusers created by the primary user
-    subusers = SubUser.query.filter_by(user_id=current_user.id).all()
-
-    # Retrieve tasks for each subuser
-    subusers_tasks = {subuser.id: Task.query.filter_by(sub_user_id=subuser.id).all() for subuser in subusers}
-
-    return render_template('view_subusers.html', subusers=subusers, subusers_tasks=subusers_tasks)

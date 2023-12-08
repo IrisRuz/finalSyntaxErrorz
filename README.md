@@ -48,7 +48,7 @@ This section should be used to describe how the scrum methodology was used in th
 |Sprint#|Goals|Start|End|Done|Observations|
 |---|---|---|---|---|---|
 |1|US#1, US#2,|mm/dd/23|mm/dd/23|US#1|...|
-|Sprint 1|Define user stories, design models, break down user stories into tasks, aim to complete US 1 & 2, create branches|Start: 11/14/2023|End|Done|Observations|
+|Sprint 1|US#1 and US#2 was broken down into tasks in Jira|11/14/2023|11/26/2023|US#1|Team tried to meet daily but had other priorities.  Only one user story completed|
 
 Use the observations column to report problems encountered during a sprint and/or to reflect on how the team has continuously improved its work.
 
@@ -56,7 +56,9 @@ Feel free to use your own format for this section, as long as you are able to co
 
 # Testing 
 
-Share in this section the results of the tests performed to attest to the quality of the developed product, including the coverage of the tests in relation to the written code. There is no minimum code coverage expectation for your tests, other than expecting "some" coverage through at least one white-box and one black-box test.
+| Test             | Name             | Start | End   | Pass  | Coverage      |
+|------------------|------------------|-------|-------|-------|---------------|
+| White Box Test   | Mark Task Complete | 12/06 | 12/07 | Pass  | App/Routes 32% |
 
 # Deployment 
 
