@@ -12,24 +12,25 @@ Our web application is designed to offer an intuitive task management system, em
 
 ## US#2
 
-*As a registered user, I want to log in to create a new task with a title, description, and due date. Since a registered user has provided their ID and password, when the registered user clicks the “Sign In” button then, if their credentials are valid, they are presented with a list of their user tasks if not they will be allowed to create a new task.*
+*As a user, I want to log in to create a new task with a title, description, and due date. I want to be able to edit and delete these tasks as well*
 
 ## US#3
 
-*As an authenticated user, I want to assign a task to another user.  Given that a user is logged in and has a task to assign when the user selects another user to assign the task to then the assigned user can see the task in their list.  
+*As an authenticated user, I want to be able to create sub-users who can log in using a username I create and a password based on the first three letters of their last name plus my username.*
+  
 
 ## US#4
 
-*As an authenticated user, I want to mark a task as complete.  Given that a user is logged in and has an incomplete task, when the user marks the task as complete, then the task's status changes to complete.  
+*As a sub user I want to be able to mark tasks as completed on my end and have a separate section to view my completed tasks* 
  
 
 ## US#5
 
-*As an authenticated user, I want to view my task list with details about each task.  Given that a user is logged in, when the user accesses their task list, then the task list displays all relevant information.  
+*As a sub-user I want to be able to see my primary user’s tasks list and have my own instance that I can mark as complete.*
 
 ## US#6
 
-*As an authenticated admin user, I want to manage user accounts.  Given that an admin is logged in, then the admin performs actions to deactivate, or delete user accounts, then the admin can successfully manage user accounts.  
+*As an admin user, I want to manage user accounts by having the ability to view all of my created subuser’s tasks and have the options to activate, reactivate, or delete a subuser.
 
 ## Model 
 
